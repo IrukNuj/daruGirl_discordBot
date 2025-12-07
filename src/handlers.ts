@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction, CacheType } from 'discord.js';
 import { appendTask, getTasks, getRandomTask, uploadImage } from './google/service.js';
+import { COMMAND_NAMES } from './discord/constants.js';
 
 export type CommandHandler = (interaction: ChatInputCommandInteraction<CacheType>) => Promise<void>;
 
@@ -43,4 +44,11 @@ export const handleAddImage: CommandHandler = async (interaction) => {
   await interaction.deferReply();
   const link = await uploadImage(image.url, memo);
   await interaction.editReply(`画像を保存したよ！\nリンク: ${link}\nメモ: ${memo}`);
+};
+
+export const commandHandlers: Record<string, CommandHandler> = {
+  [COMMAND_NAMES.ADD_TASK]: handleAddTask,
+  [COMMAND_NAMES.LIST_TASKS]: handleListTasks,
+  [COMMAND_NAMES.PICK_TASK]: handlePickTask,
+  [COMMAND_NAMES.ADD_IMAGE]: handleAddImage,
 };
