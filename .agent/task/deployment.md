@@ -1,0 +1,32 @@
+# タスクリスト: デプロイ & 環境構築
+
+- [ ] コード管理 (ユーザー作業) <!-- id: 37 -->
+    - [ ] GitHub (またはGitLab等) リポジトリの作成 <!-- id: 38 -->
+    - [ ] コードのPush <!-- id: 39 -->
+    - [ ] **GCP VMからのアクセス設定**: Privateリポジトリの場合、Deploy Key (SSH) の設定が必要 <!-- id: 43 -->
+- [ ] Discord 設定 (ユーザー作業: 詳細手順はSETUP_GUIDE参照) <!-- id: 25 -->
+    - [ ] Application作成 & Botユーザー作成 (Developer Portal) <!-- id: 26 -->
+    - [ ] Token, Client ID の取得 <!-- id: 27 -->
+    - [ ] サーバー招待URL生成 (Scopes: `bot`, `applications.commands`) <!-- id: 28 -->
+    - [ ] サーバーへのBot招待 & Guild ID の取得 <!-- id: 30 -->
+    - [ ] `.env.example` を参考にローカル `.env` を更新 (DISCORD_TOKEN, DISCORD_CLIENT_ID, DISCORD_GUILD_ID) <!-- id: 29 -->
+- [ ] Google Workspace 準備 (ユーザー作業: 詳細手順はSETUP_GUIDE参照) <!-- id: 31 -->
+    - [ ] スプレッドシートの新規作成 & ID取得 <!-- id: 32 -->
+    - [ ] イラスト保存用Driveフォルダの新規作成 & ID取得 <!-- id: 33 -->
+    - [ ] ローカル `.env` へIDを反映 (SPREADSHEET_ID, DRIVE_FOLDER_ID) <!-- id: 34 -->
+- [ ] Google Cloud 設定 (ユーザー作業: 詳細手順はSETUP_GUIDE参照) <!-- id: 10 -->
+    - [ ] GCPプロジェクトの作成 & **請求先アカウント(Billing)の紐付け** <!-- id: 35 -->
+    - [ ] Service Account作成 & JSON Key取得・環境変数設定 <!-- id: 11 -->
+    - [ ] API有効化 (Google Sheets API, Google Drive API) <!-- id: 12 -->
+    - [ ] **重要**: シートとフォルダへService Accountメールアドレスを共有 (編集者権限) <!-- id: 13 -->
+- [ ] 検証 <!-- id: 14 -->
+    - [ ] ローカルでの起動確認 (`npm run dev`) <!-- id: 15 -->
+    - [ ] コマンド動作確認 (`/やりたいことついか`, `/いらすとついか` 等) <!-- id: 16 -->
+- [ ] デプロイ (GCP Compute Engine) <!-- id: 17 -->
+    - [ ] VMセットアップスクリプト(startup-script)作成 (必要に応じて) <!-- id: 18 -->
+    - [ ] VM作成 (e2-micro/Ubuntu, USリージョン推奨) <!-- id: 19 -->
+    - [ ] 接続 & Git Clone (Deploy Key設定済み前提) <!-- id: 36 -->
+    - [ ] **サーバー上での `.env` 作成** <!-- id: 42 -->
+    - [ ] サーバー内環境構築 (npm install, build) <!-- id: 44 -->
+    - [ ] PM2による起動 & 常時稼働設定 (startup) <!-- id: 24 -->
+    - [ ] 動作確認 (ログ確認 `pm2 logs`) <!-- id: 45 -->

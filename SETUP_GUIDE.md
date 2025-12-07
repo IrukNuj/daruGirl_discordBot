@@ -16,9 +16,9 @@
     *   最低限: `Send Messages`, `Read Message History` (デバッグ用)
 9.  生成されたURLをコピーし、ブラウザで開いてBotを自分のサーバーに招待します。
 10. 左側メニューの **"General Information"** で **APPLICATION ID** をコピーします。
-    *   👉 `.env` の `CLIENT_ID` に設定します。
+    *   👉 `.env` の `DISCORD_CLIENT_ID` に設定します。
 11. Discordアプリ上で、Botを導入したサーバーのIDをコピーします（開発者モードをONにしてサーバーアイコンを右クリック -> "サーバーIDをコピー"）。
-    *   👉 `.env` の `GUILD_ID` に設定します。
+    *   👉 `.env` の `DISCORD_GUILD_ID` に設定します。
 
 ## 2. Google Workspace (Sheets & Drive) の準備
 
