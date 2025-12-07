@@ -1,6 +1,6 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
-import { handleReady, handleInteraction } from './discord/events.js';
+import { handleReady, handleInteraction } from '@/discord/events.js';
 
 dotenv.config();
 

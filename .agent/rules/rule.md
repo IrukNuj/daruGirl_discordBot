@@ -1,10 +1,11 @@
 - 使用する言語は基本的に日本語とすること
-- `.md`内の記述について、基本的に日本語とすること
-- implementational plan, Taskの内容は、それぞれのディレクトリ内に`.agent/implementational_plan/{implementational_plan_name}.md`と`.agent/task/{task_name}.md`ファイルを作成すること
+- .md内の記述について、基本的に日本語とすること
+- implementational plan, Taskの内容は、それぞれのディレクトリ内に.agent/implementational_plan/{implementational_plan_name}.mdと.agent/task/{task_name}.mdファイルを作成すること
   - この操作は、各実行計画に基づく操作を行う度に行うこと。
   - 実行計画の内容の改善時には新規ファイルの作成を行う必要はなく、既存該当ファイルが有ればその内容の修正のみ行うこと
-- このファイル内のruleについて、`.agent/rules/rule.md`ファイルを作成し、転記すること
+- このファイル内のruleについて、.agent/rules/rule.mdファイルを作成し、転記すること
 - gitのcommitについて、日本語で記述を行うこと
+
 
 ## typeScript
 
@@ -12,6 +13,8 @@
 - letは使用禁止です
 - コメントについて、宣言内容に対する就職である場合、JSDocを使用してください。
   - また、コメントについて日本語での記述を行ってください
-- コメントは『リーダブルコード』に基づき、自明な内容は省略し、必要な要約や理由のみを簡潔に記述すること
   - コメントについて、宣言した変数名から処理内容や副作用、プロパティの詳細の判別が難しいと判断した場合は、コメントを記述してください
     - その際のコメントは、内容の記述を簡潔に行うもののみであり、命令などの経緯を記載する必要はありません
+- importはbaseUrlに基づいてのみ行うこと。
+  - baseUrlが存在しない場合は適切に	sconfig.jsonへの追加を行う。
+  - baseUrlのpathについて、@としてaliasの設定を行うこと
