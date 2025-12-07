@@ -1,7 +1,6 @@
 
-import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, Interaction, ChatInputCommandInteraction, CacheType } from 'discord.js';
+import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, Interaction } from 'discord.js';
 import dotenv from 'dotenv';
-import { appendTask, getTasks, getRandomTask, uploadImage } from './googleClient.js';
 import { handleAddTask, handleListTasks, handlePickTask, handleAddImage, CommandHandler } from './handlers.js';
 
 dotenv.config();

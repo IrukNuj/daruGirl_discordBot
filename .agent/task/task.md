@@ -4,15 +4,14 @@
     - [x] 既存ファイルの確認 <!-- id: 1 -->
     - [/] `package.json` の作成 (TS/Lint対応) <!-- id: 2 -->
     - [x] `.env` の作成 <!-- id: 3 -->
+    - [x] `.env.example` の作成 <!-- id: 4 -->
     - [/] 開発環境設定 (TypeScript/Lint/Prettier) <!-- id: 20 -->
         - [x] `tsconfig.json` 作成 <!-- id: 21 -->
         - [x] ESLint/Prettier 設定作成 <!-- id: 22 -->
-- [ ] ドキュメント作成 <!-- id: 40 -->
-    - [x] `SETUP_GUIDE.md` (環境構築・デプロイ詳細手順書) の作成 <!-- id: 41 -->
-- [ ] 実装 (TypeScript) <!-- id: 4 -->
+- [x] 実装 & リファクタリング <!-- id: 4 -->
     - [x] 実装計画の作成 <!-- id: 5 -->
-    - [x] `googleClient.ts` の実装 (API Wrapper) <!-- id: 7 -->
     - [x] `index.ts` の実装 (Main logic) <!-- id: 6 -->
+    - [x] `googleClient.ts` の実装 (API Wrapper) <!-- id: 7 -->
     - [x] 旧JSファイルの削除 <!-- id: 23 -->
     - [x] **リファクタリング (FP志向)**: `index.ts` を関数型スタイルに修正 <!-- id: 46 -->
     - [x] **リファクタリング (FP志向)**: `googleClient.ts` を関数型スタイルに修正 <!-- id: 47 -->
@@ -20,6 +19,11 @@
     - [x] **リファクタリング (JSDoc)**: コメントをJSDoc形式に修正 <!-- id: 49 -->
     - [x] **リファクタリング (JSDoc-JP)**: コメントを日本語に翻訳 <!-- id: 50 -->
     - [x] **リファクタリング (Readable)**: 不要なコメントの削除と要約化 <!-- id: 51 -->
+    - [x] **リファクタリング (Module)**: ハンドラを `src/handlers.ts` に分離 <!-- id: 52 -->
+    - [x] **リファクタリング (Module)**: `googleClient.ts` を機能別ファイル (`src/google/*.ts`) に分割 <!-- id: 53 -->
+    - [x] **リファクタリング (Naming)**: ファイル名・関数名をGoogleサービス明示に変更 <!-- id: 54 -->
+- [x] ドキュメント作成 <!-- id: 40 -->
+    - [x] `SETUP_GUIDE.md` (環境構築・デプロイ詳細手順書) の作成 <!-- id: 41 -->
 - [ ] コード管理 (ユーザー作業) <!-- id: 37 -->
     - [ ] GitHub (またはGitLab等) リポジトリの作成 <!-- id: 38 -->
     - [ ] コードのPush <!-- id: 39 -->
