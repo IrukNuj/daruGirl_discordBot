@@ -2,6 +2,7 @@
 import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, Interaction, ChatInputCommandInteraction, CacheType } from 'discord.js';
 import dotenv from 'dotenv';
 import { appendTask, getTasks, getRandomTask, uploadImage } from './googleClient.js';
+import { handleAddTask, handleListTasks, handlePickTask, handleAddImage, CommandHandler } from './handlers.js';
 
 dotenv.config();
 
@@ -19,45 +20,6 @@ const commands = [
   new SlashCommandBuilder().setName(COMMAND_NAMES.ADD_IMAGE).setDescription('イラストをDriveに保存します').addAttachmentOption(option => option.setName('画像').setDescription('保存する画像').setRequired(true)).addStringOption(option => option.setName('メモ').setDescription('画像のメモ')),
 ].map(command => command.toJSON());
 
-type CommandHandler = (interaction: ChatInputCommandInteraction<CacheType>) => Promise<void>;
-
-const handleAddTask: CommandHandler = async (interaction) => {
-  const task = interaction.options.getString('内容');
-  if (!task) {
-    await interaction.reply({ content: '内容が空だよ！', ephemeral: true });
-    return;
-  }
-  await interaction.deferReply();
-  await appendTask(task);
-  await interaction.editReply(`「${task}」をリストに追加したよ！`);
-};
-
-const handleListTasks: CommandHandler = async (interaction) => {
-  await interaction.deferReply();
-  const tasks = await getTasks();
-  const taskList = tasks.map(t => `- ${t}`).join('\n') || 'リストは空だよ！';
-  await interaction.editReply(`**やりたいことリスト**\n${taskList}`);
-};
-
-const handlePickTask: CommandHandler = async (interaction) => {
-  await interaction.deferReply();
-  const task = await getRandomTask();
-  await interaction.editReply(task ? `これどう？: **${task}**` : 'リストは空だよ！');
-};
-
-const handleAddImage: CommandHandler = async (interaction) => {
-  const image = interaction.options.getAttachment('画像');
-  const memo = interaction.options.getString('メモ') || '';
-
-  if (!image || !image.contentType?.startsWith('image/')) {
-    await interaction.reply({ content: '画像ファイルを選択してね！', ephemeral: true });
-    return;
-  }
-
-  await interaction.deferReply();
-  const link = await uploadImage(image.url, memo);
-  await interaction.editReply(`画像を保存したよ！\nリンク: ${link}\nメモ: ${memo}`);
-};
 const commandHandlers: Record<string, CommandHandler> = {
   [COMMAND_NAMES.ADD_TASK]: handleAddTask,
   [COMMAND_NAMES.LIST_TASKS]: handleListTasks,
