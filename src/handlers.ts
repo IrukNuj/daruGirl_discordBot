@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, CacheType } from 'discord.js';
-import { appendTask, getTasks, getRandomTask, uploadImage } from './google/googleService.js';
+import { appendTask, getTasks, getRandomTask, uploadImage } from './google/service.js';
 
 export type CommandHandler = (interaction: ChatInputCommandInteraction<CacheType>) => Promise<void>;
 
