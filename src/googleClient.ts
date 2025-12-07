@@ -21,7 +21,6 @@ type GoogleContext = {
     driveFolderId: string;
 };
 
-// --- Pure / Configuration ---
 
 const getCredentials = (): Credentials =>
   JSON.parse(process.env.GOOGLE_CREDENTIALS || '{}');
@@ -39,11 +38,9 @@ const getContext = (): GoogleContext => ({
     driveFolderId: process.env.DRIVE_FOLDER_ID || '',
 });
 
-// --- Service Factories ---
 const getSheetsService = (auth: OAuth2Client): sheets_v4.Sheets => google.sheets({ version: 'v4', auth });
 const getDriveService = (auth: OAuth2Client): drive_v3.Drive => google.drive({ version: 'v3', auth });
 
-// --- Core Operations (Single Responsibility) ---
 
 export const appendToSheet = async (context: GoogleContext, range: string, values: string[][]): Promise<void> => {
   const sheets = getSheetsService(context.auth);
@@ -100,7 +97,6 @@ const uploadFileToDrive = async (
     return file.data.webViewLink || '';
 };
 
-// --- Exported Composition Functions (The "Effects") ---
 
 export const appendTask = async (task: string): Promise<void> =>
     appendToSheet(getContext(), 'A:A', [[task]]);

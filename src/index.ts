@@ -5,7 +5,6 @@ import { appendTask, getTasks, getRandomTask, uploadImage } from './googleClient
 
 dotenv.config();
 
-// Command Definitions
 const COMMAND_NAMES = {
   ADD_TASK: 'やりたいことついか',
   LIST_TASKS: 'やりたいことりすと',
@@ -59,7 +58,6 @@ const handleAddImage: CommandHandler = async (interaction) => {
   const link = await uploadImage(image.url, memo);
   await interaction.editReply(`画像を保存したよ！\nリンク: ${link}\nメモ: ${memo}`);
 };
-
 const commandHandlers: Record<string, CommandHandler> = {
   [COMMAND_NAMES.ADD_TASK]: handleAddTask,
   [COMMAND_NAMES.LIST_TASKS]: handleListTasks,
@@ -67,7 +65,6 @@ const commandHandlers: Record<string, CommandHandler> = {
   [COMMAND_NAMES.ADD_IMAGE]: handleAddImage,
 };
 
-// Main Execution
 const main = async () => {
     const client = new Client({ intents: [GatewayIntentBits.Guilds] });
     const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN || '');
