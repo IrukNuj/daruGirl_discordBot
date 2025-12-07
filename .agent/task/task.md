@@ -4,16 +4,16 @@
     - [x] 既存ファイルの確認 <!-- id: 1 -->
     - [/] `package.json` の作成 (TS/Lint対応) <!-- id: 2 -->
     - [x] `.env` の作成 <!-- id: 3 -->
-    - [ ] 開発環境設定 (TypeScript/Lint/Prettier) <!-- id: 20 -->
-        - [ ] `tsconfig.json` 作成 <!-- id: 21 -->
-        - [ ] ESLint/Prettier 設定作成 <!-- id: 22 -->
+    - [/] 開発環境設定 (TypeScript/Lint/Prettier) <!-- id: 20 -->
+        - [x] `tsconfig.json` 作成 <!-- id: 21 -->
+        - [x] ESLint/Prettier 設定作成 <!-- id: 22 -->
 - [ ] ドキュメント作成 <!-- id: 40 -->
     - [ ] `SETUP_GUIDE.md` (環境構築・デプロイ詳細手順書) の作成 <!-- id: 41 -->
 - [ ] 実装 (TypeScript) <!-- id: 4 -->
     - [x] 実装計画の作成 <!-- id: 5 -->
-    - [ ] `googleClient.ts` の実装 (API Wrapper) <!-- id: 7 -->
-    - [ ] `index.ts` の実装 (Main logic) <!-- id: 6 -->
-    - [ ] 旧JSファイルの削除 <!-- id: 23 -->
+    - [x] `googleClient.ts` の実装 (API Wrapper) <!-- id: 7 -->
+    - [x] `index.ts` の実装 (Main logic) <!-- id: 6 -->
+    - [x] 旧JSファイルの削除 <!-- id: 23 -->
 - [ ] コード管理 (ユーザー作業) <!-- id: 37 -->
     - [ ] GitHub (またはGitLab等) リポジトリの作成 <!-- id: 38 -->
     - [ ] コードのPush <!-- id: 39 -->

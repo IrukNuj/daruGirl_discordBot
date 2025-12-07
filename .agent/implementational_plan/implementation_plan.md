@@ -27,7 +27,7 @@ Google Sheetsでタスク管理を行い、Google Driveにイラストをアッ�
 - 環境変数のテンプレート（`GOOGLE_CREDENTIALS` 含む）。
 
 ### 実装ファイル
-#### [NEW] [index.ts](file:///index.ts)
+#### [NEW] [src/index.ts](file:///src/index.ts)
 - メインエントリーポイント。
 - Discord Clientの初期化とGoogle認証設定。
 - スラッシュコマンドの登録:
@@ -36,7 +36,7 @@ Google Sheetsでタスク管理を行い、Google Driveにイラストをアッ�
     - `やりたいこととりだし`: タスクをランダムに1つ提案。
     - `いらすとついか`: 画像をDriveにアップロードし、リンクをシートに記録。
 
-#### [NEW] [googleClient.ts](file:///googleClient.ts)
+#### [NEW] [src/googleClient.ts](file:///src/googleClient.ts)
 - Google認証（Service Account）のハンドリング。
 - Sheets API操作（追加、読み込み）。
 - Drive API操作（ファイルアップロード）。
