@@ -24,6 +24,7 @@
     - [x] **リファクタリング (Naming)**: ファイル名・関数名をGoogleサービス明示に変更 (ファイル名のgoogle接頭辞は削除) <!-- id: 54 -->
     - [x] **リファクタリング (Simplify)**: `index.ts` の `main` 関数を簡潔化 (`src/discord/` への分離) <!-- id: 55 -->
     - [x] **リファクタリング (Module)**: `handlers.ts` を `src/discord/` に移動 <!-- id: 56 -->
+    - [x] **リファクタリング (Imports)**: `import` を `baseUrl` (`src/`) に基づく絶対パスに統一 <!-- id: 57 -->
 - [x] ドキュメント作成 <!-- id: 40 -->
     - [x] `SETUP_GUIDE.md` (環境構築・デプロイ詳細手順書) の作成 <!-- id: 41 -->
 - [ ] コード管理 (ユーザー作業) <!-- id: 37 -->
