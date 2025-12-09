@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import { Client, TextChannel } from 'discord.js';
 import { getTasks } from '../google/service.js';
 import { fetchGuildSettings } from '../google/config.js';
-import { createTaskListEmbed } from './embeds.js';
+import { createListTasksEmbed } from './embeds.js';
 
 export const setupScheduledTasks = (client: Client) => {
     // 毎日 12:00 JST に実行
@@ -15,7 +15,7 @@ export const setupScheduledTasks = (client: Client) => {
 
             // 2. タスクリストの取得 (全サーバー共通)
             const tasks = await getTasks();
-            const embed = createTaskListEmbed(tasks);
+            const embed = createListTasksEmbed(tasks);
 
             // 3. 参加サーバーをループして送信
             for (const [guildId, guild] of client.guilds.cache) {

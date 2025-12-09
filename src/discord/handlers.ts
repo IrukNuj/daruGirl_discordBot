@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, CacheType, EmbedBuilder, Colors, StringSelectMenuInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, ComponentType } from 'discord.js';
 import { appendTask, getTasks, getRandomTask, uploadImage, deleteTasks } from 'google/service.js';
 import { setGuildSetting } from 'google/config.js';
-import { createTaskListEmbed } from './embeds.js';
+import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createImageUploadedEmbed, createConfigUpdatedEmbed, createTaskDeletedEmbed } from './embeds.js';
 import { COMMAND_NAMES } from './constants.js';
 
 export type CommandHandler = (interaction: ChatInputCommandInteraction<CacheType>) => Promise<void>;
@@ -16,12 +16,7 @@ export const handleAddTask: CommandHandler = async (interaction) => {
   await interaction.deferReply();
   await appendTask(task);
 
-  const embed = new EmbedBuilder()
-    .setTitle('✅ 追加しました！')
-    .setDescription(`「**${task}**」をやることリストに追加しました。`)
-    .setColor(Colors.Green)
-    .setTimestamp();
-
+  const embed = createTaskAddedEmbed(task);
   await interaction.editReply({ embeds: [embed] });
 };
 
@@ -29,7 +24,7 @@ export const handleAddTask: CommandHandler = async (interaction) => {
 export const handleListTasks: CommandHandler = async (interaction) => {
   await interaction.deferReply();
   const tasks = await getTasks();
-  const embed = createTaskListEmbed(tasks);
+  const embed = createListTasksEmbed(tasks);
   await interaction.editReply({ embeds: [embed] });
 };
 
@@ -38,18 +33,7 @@ export const handlePickTask: CommandHandler = async (interaction) => {
   await interaction.deferReply();
   const task = await getRandomTask();
 
-  const embed = new EmbedBuilder()
-    .setColor(Colors.Gold)
-    .setTimestamp();
-
-  if (task) {
-    embed.setTitle('🎲 今日のご提案')
-         .setDescription(`これはいかがですか？\n\n**「${task}」**`);
-  } else {
-    embed.setTitle('😢 リストが空です')
-         .setDescription('まずは `/やることついか` で追加してね！');
-  }
-
+  const embed = createTaskPickedEmbed(task);
   await interaction.editReply({ embeds: [embed] });
 };
 
@@ -66,16 +50,7 @@ export const handleAddImage: CommandHandler = async (interaction) => {
   await interaction.deferReply();
   const link = await uploadImage(image.url, memo);
 
-  const embed = new EmbedBuilder()
-    .setTitle('🖼️ 画像を保存しました')
-    .addFields(
-        { name: 'メモ', value: memo || 'なし', inline: true },
-        { name: 'Drive Link', value: `[開く](${link})`, inline: true }
-    )
-    .setImage(image.url)
-    .setColor(Colors.Aqua)
-    .setTimestamp();
-
+  const embed = createImageUploadedEmbed(link, memo, image.url);
   await interaction.editReply({ embeds: [embed] });
 };
 
@@ -94,12 +69,7 @@ export const handleConfigureReport: CommandHandler = async (interaction) => {
   try {
     await setGuildSetting(interaction.guildId, isEnable);
 
-    const embed = new EmbedBuilder()
-      .setTitle('⚙️ 設定を変更しました')
-      .setDescription(`定期レポートを **${isEnable ? '有効' : '無効'}** にしました。`)
-      .setColor(isEnable ? Colors.Green : Colors.Grey)
-      .setTimestamp();
-
+    const embed = createConfigUpdatedEmbed(isEnable);
     await interaction.editReply({ embeds: [embed] });
   } catch (e) {
     console.error(e);
@@ -152,7 +122,7 @@ export const handleDeleteSelect = async (interaction: StringSelectMenuInteractio
 
         // 元のメッセージのコンポーネント（メニュー）を無効化あるいは削除すると親切だが、今回は単純に完了通知
         await interaction.editReply({
-            content: `✅ 以下の${selectedTasks.length}件を削除しました。\n` + selectedTasks.map(t => `・${t}`).join('\n')
+            content: createTaskDeletedEmbed(selectedTasks)
         });
     }
 };
