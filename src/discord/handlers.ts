@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, CacheType, EmbedBuilder, Colors, StringSelectMenuInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, ComponentType } from 'discord.js';
-import { appendTask, getTasks, getRandomTask, uploadImage, deleteTasks } from 'google/service.js';
-import { setGuildSetting } from 'google/config.js';
+import { appendTask, getTasks, getRandomTask, uploadImage, deleteTasks } from '../google/service.js';
+import { setGuildSetting } from '../google/config.js';
 import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createImageUploadedEmbed, createConfigUpdatedEmbed, createTaskDeletedEmbed } from './embeds.js';
 import { COMMAND_NAMES } from './constants.js';
 

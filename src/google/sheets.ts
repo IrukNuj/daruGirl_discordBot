@@ -1,6 +1,6 @@
 import { google, sheets_v4 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-import { GoogleContext } from 'google/types.js';
+import { GoogleContext } from './types.js';
 
 const getSheetsService = (auth: OAuth2Client): sheets_v4.Sheets => google.sheets({ version: 'v4', auth });
 

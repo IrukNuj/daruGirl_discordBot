@@ -1,59 +1,65 @@
 # タスクリスト: Discord Bot with Google Sheets & Drive
 
-- [x] プロジェクト初期化 <!-- id: 0 -->
-    - [x] 既存ファイルの確認 <!-- id: 1 -->
-    - [/] `package.json` の作成 (TS/Lint対応) <!-- id: 2 -->
-    - [x] `.env` の作成 <!-- id: 3 -->
-    - [x] `.env.example` の作成 <!-- id: 4 -->
-    - [/] 開発環境設定 (TypeScript/Lint/Prettier) <!-- id: 20 -->
-        - [x] `tsconfig.json` 作成 <!-- id: 21 -->
-        - [x] ESLint/Prettier 設定作成 <!-- id: 22 -->
-- [x] 実装 & リファクタリング <!-- id: 4 -->
-    - [x] 実装計画の作成 <!-- id: 5 -->
-    - [x] `index.ts` の実装 (Main logic) <!-- id: 6 -->
-    - [x] `googleClient.ts` の実装 (API Wrapper) <!-- id: 7 -->
-    - [x] 旧JSファイルの削除 <!-- id: 23 -->
-    - [x] **リファクタリング (FP志向)**: `index.ts` を関数型スタイルに修正 <!-- id: 46 -->
-    - [x] **リファクタリング (FP志向)**: `googleClient.ts` を関数型スタイルに修正 <!-- id: 47 -->
-    - [x] **リファクタリング (No let)**: `googleClient.ts` から `let` を除去 <!-- id: 48 -->
-    - [x] **リファクタリング (JSDoc)**: コメントをJSDoc形式に修正 <!-- id: 49 -->
-    - [x] **リファクタリング (JSDoc-JP)**: コメントを日本語に翻訳 <!-- id: 50 -->
-    - [x] **リファクタリング (Readable)**: 不要なコメントの削除と要約化 <!-- id: 51 -->
-    - [x] **リファクタリング (Module)**: ハンドラを `src/handlers.ts` に分離 <!-- id: 52 -->
-    - [x] **リファクタリング (Module)**: `googleClient.ts` を機能別ファイル (`src/google/*.ts`) に分割 <!-- id: 53 -->
-    - [x] **リファクタリング (Naming)**: ファイル名・関数名をGoogleサービス明示に変更 (ファイル名のgoogle接頭辞は削除) <!-- id: 54 -->
-    - [x] **リファクタリング (Simplify)**: `index.ts` の `main` 関数を簡潔化 (`src/discord/` への分離) <!-- id: 55 -->
-    - [x] **リファクタリング (Module)**: `handlers.ts` を `src/discord/` に移動 <!-- id: 56 -->
-    - [x] **リファクタリング (Imports)**: `import` を `baseUrl` (`src/`) に基づく絶対パスに統一 <!-- id: 57 -->
-- [x] ドキュメント作成 <!-- id: 40 -->
-    - [x] `SETUP_GUIDE.md` (環境構築・デプロイ詳細手順書) の作成 <!-- id: 41 -->
-- [ ] コード管理 (ユーザー作業) <!-- id: 37 -->
-    - [ ] GitHub (またはGitLab等) リポジトリの作成 <!-- id: 38 -->
-    - [ ] コードのPush <!-- id: 39 -->
-    - [ ] **GCP VMからのアクセス設定**: Privateリポジトリの場合、Deploy Key (SSH) の設定が必要 <!-- id: 43 -->
-- [ ] Discord 設定 (ユーザー作業: 詳細手順はSETUP_GUIDE参照) <!-- id: 25 -->
-    - [ ] Application作成 & Botユーザー作成 (Developer Portal) <!-- id: 26 -->
-    - [ ] Token, Client ID の取得 <!-- id: 27 -->
-    - [ ] サーバー招待URL生成 (Scopes: `bot`, `applications.commands`) <!-- id: 28 -->
-    - [ ] サーバーへのBot招待 & Guild ID の取得 <!-- id: 30 -->
-    - [ ] `.env` への反映 (TOKEN, CLIENT_ID, GUILD_ID) <!-- id: 29 -->
-- [ ] Google Workspace 準備 (ユーザー作業: 詳細手順はSETUP_GUIDE参照) <!-- id: 31 -->
-    - [ ] スプレッドシートの新規作成 & ID取得 <!-- id: 32 -->
-    - [ ] イラスト保存用Driveフォルダの新規作成 & ID取得 <!-- id: 33 -->
-    - [ ] `.env` への反映 (SPREADSHEET_ID, DRIVE_FOLDER_ID) <!-- id: 34 -->
-- [ ] Google Cloud 設定 (ユーザー作業: 詳細手順はSETUP_GUIDE参照) <!-- id: 10 -->
-    - [ ] GCPプロジェクトの作成 & **請求先アカウント(Billing)の紐付け** <!-- id: 35 -->
-    - [ ] Service Account作成 & JSON Key取得・環境変数設定 <!-- id: 11 -->
-    - [ ] API有効化 (Google Sheets API, Google Drive API) <!-- id: 12 -->
-    - [ ] **重要**: シートとフォルダへService Accountメールアドレスを共有 (編集者権限) <!-- id: 13 -->
-- [ ] 検証 <!-- id: 14 -->
-    - [ ] ローカルでの起動確認 (`npm run dev`) <!-- id: 15 -->
-    - [ ] コマンド動作確認 <!-- id: 16 -->
-- [ ] デプロイ (GCP Compute Engine) <!-- id: 17 -->
-    - [ ] VMセットアップスクリプト(startup-script)作成 <!-- id: 18 -->
-    - [ ] VM作成 (e2-micro/Ubuntu, USリージョン推奨) <!-- id: 19 -->
-    - [ ] 接続 & Git Clone (Deploy Key設定済み前提) <!-- id: 36 -->
-    - [ ] **サーバー上での `.env` 作成** <!-- id: 42 -->
-    - [ ] サーバー内環境構築 (npm install, build) <!-- id: 44 -->
-    - [ ] PM2による起動 & 常時稼働設定 (startup) <!-- id: 24 -->
-    - [ ] 動作確認 (ログ確認 `pm2 logs`) <!-- id: 45 -->
+- [x] プロジェクト初期化
+    - [x] 既存ファイルの確認
+    - [/] `package.json` の作成 (TS/Lint対応)
+    - [x] `.env` の作成
+    - [x] `.env.example` の作成
+    - [/] 開発環境設定 (TypeScript/Lint/Prettier)
+        - [x] `tsconfig.json` 作成
+        - [x] ESLint/Prettier 設定作成
+- [x] 実装 & リファクタリング
+    - [x] 実装計画の作成
+    - [x] `index.ts` の実装 (Main logic)
+    - [x] `googleClient.ts` の実装 (API Wrapper)
+    - [x] 旧JSファイルの削除
+    - [x] **リファクタリング (FP志向)**: `index.ts` を関数型スタイルに修正
+    - [x] **リファクタリング (FP志向)**: `googleClient.ts` を関数型スタイルに修正
+    - [x] **リファクタリング (No let)**: `googleClient.ts` から `let` を除去
+    - [x] **リファクタリング (JSDoc)**: コメントをJSDoc形式に修正
+    - [x] **リファクタリング (JSDoc-JP)**: コメントを日本語に翻訳
+    - [x] **リファクタリング (Readable)**: 不要なコメントの削除と要約化
+    - [x] **リファクタリング (Module)**: ハンドラを `src/handlers.ts` に分離
+    - [x] **リファクタリング (Module)**: `googleClient.ts` を機能別ファイル (`src/google/*.ts`) に分割
+    - [x] **リファクタリング (Naming)**: ファイル名・関数名をGoogleサービス明示に変更 (ファイル名のgoogle接頭辞は削除)
+    - [x] **リファクタリング (Simplify)**: `index.ts` の `main` 関数を簡潔化 (`src/discord/` への分離)
+    - [x] **リファクタリング (Module)**: `handlers.ts` を `src/discord/` に移動
+    - [x] **リファクタリング (Imports)**: `import` を `baseUrl` (`src/`) に基づく絶対パスに統一
+    - [x] **機能追加**: 12時の定期レポート機能 (Cron)
+    - [x] **機能追加**: 定期レポート設定コマンド (`/レポート設定`)
+    - [x] **機能追加**: タスク削除コマンド (`/やることさくじょ`)
+    - [x] **リファクタリング**: コマンド名の変更 (`やりたいこと` -> `やること`)
+    - [x] **リファクタリング**: Embed生成ロジックの共通化 (`embeds.ts`)
+    - [x] **バグ修正**: モジュールインポートパスを相対パスに修正
+- [x] ドキュメント作成
+    - [x] `SETUP_GUIDE.md` (環境構築・デプロイ詳細手順書) の作成
+- [ ] コード管理 (ユーザー作業)
+    - [ ] GitHub (またはGitLab等) リポジトリの作成
+    - [ ] コードのPush
+    - [ ] **GCP VMからのアクセス設定**: Privateリポジトリの場合、Deploy Key (SSH) の設定が必要
+- [ ] Discord 設定 (ユーザー作業: 詳細手順はSETUP_GUIDE参照)
+    - [ ] Application作成 & Botユーザー作成 (Developer Portal)
+    - [ ] Token, Client ID の取得
+    - [ ] サーバー招待URL生成 (Scopes: `bot`, `applications.commands`)
+    - [ ] サーバーへのBot招待 & Guild ID の取得
+    - [ ] `.env` への反映 (TOKEN, CLIENT_ID, GUILD_ID)
+- [ ] Google Workspace 準備 (ユーザー作業: 詳細手順はSETUP_GUIDE参照)
+    - [ ] スプレッドシートの新規作成 & ID取得
+    - [ ] イラスト保存用Driveフォルダの新規作成 & ID取得
+    - [ ] `.env` への反映 (SPREADSHEET_ID, DRIVE_FOLDER_ID)
+- [ ] Google Cloud 設定 (ユーザー作業: 詳細手順はSETUP_GUIDE参照)
+    - [ ] GCPプロジェクトの作成 & **請求先アカウント(Billing)の紐付け**
+    - [ ] Service Account作成 & JSON Key取得・環境変数設定
+    - [ ] API有効化 (Google Sheets API, Google Drive API)
+    - [ ] **重要**: シートとフォルダへService Accountメールアドレスを共有 (編集者権限)
+- [ ] 検証
+    - [ ] ローカルでの起動確認 (`npm run dev`)
+    - [ ] コマンド動作確認
+- [ ] デプロイ (GCP Compute Engine)
+    - [ ] VMセットアップスクリプト(startup-script)作成
+    - [ ] VM作成 (e2-micro/Ubuntu, USリージョン推奨)
+    - [ ] 接続 & Git Clone (Deploy Key設定済み前提)
+    - [ ] **サーバー上での `.env` 作成**
+    - [ ] サーバー内環境構築 (npm install, build)
+    - [ ] PM2による起動 & 常時稼働設定 (startup)
+    - [ ] 動作確認 (ログ確認 `pm2 logs`)

@@ -1,7 +1,7 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
-import { handleReady, handleInteraction } from 'discord/events.js';
-import { setupScheduledTasks } from 'discord/cron.js';
+import { handleReady, handleInteraction } from './discord/events.js';
+import { setupScheduledTasks } from './discord/cron.js';
 
 dotenv.config();
 
