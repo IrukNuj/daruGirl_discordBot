@@ -19,7 +19,7 @@ export const setupScheduledTasks = (client: Client) => {
                 if (settings.get(guildId)) {
                     // サーバーごとのタスク取得
                     const tasks = getTasks(guildId);
-                    const taskStrings = tasks.map(t => `${t.title} [${t.status}]`);
+                    const taskStrings = tasks.map(t => `[${t.category}] ${t.title} [${t.status}]`);
                     const embed = createListTasksEmbed(taskStrings);
 
                     const channel = guild.systemChannel;

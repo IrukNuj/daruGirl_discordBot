@@ -18,6 +18,7 @@ export const initDb = () => {
       guild_id TEXT NOT NULL,
       title TEXT NOT NULL,
       description TEXT,
+      category TEXT DEFAULT 'やること',
       status TEXT DEFAULT 'TODO' CHECK(status IN ('TODO', 'CHECK', 'DONE')),
       author TEXT NOT NULL,
       created_at TEXT NOT NULL,

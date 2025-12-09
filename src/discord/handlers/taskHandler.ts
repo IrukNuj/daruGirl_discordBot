@@ -9,6 +9,7 @@ import { CommandHandler } from '@/discord/handlers/index.js';
 export const handleAddTask: CommandHandler = async (interaction) => {
   const title = interaction.options.getString('内容');
   const description = interaction.options.getString('詳細') || '';
+  const category = interaction.options.getString('カテゴリ') || 'やること';
 
   if (!title) {
     await interaction.reply({ content: '内容が空だよ！', ephemeral: true });
@@ -26,6 +27,7 @@ export const handleAddTask: CommandHandler = async (interaction) => {
       guild_id: interaction.guildId,
       title,
       description,
+      category,
       author: interaction.user.tag // or interaction.user.id
   });
 
@@ -42,8 +44,8 @@ export const handleListTasks: CommandHandler = async (interaction) => {
   // mapping Task objects to string for existing embed compatibility or updating embed
   // For now, let's update call to pass Task objects if we update embed, OR map to string.
   // The existing embed expects string[]. We should update embed later.
-  // Mapping to string format "Title (Status)"
-  const taskStrings = tasks.map(t => `${t.title} [${t.status}]`);
+  // Mapping to string format "[Category] Title [Status]"
+  const taskStrings = tasks.map(t => `[${t.category}] ${t.title} [${t.status}]`);
 
   const embed = createListTasksEmbed(taskStrings);
   await interaction.editReply({ embeds: [embed] });

@@ -39,6 +39,12 @@
         - [x] DB層実装 (`src/db/*.ts`)
         - [x] コマンド更新 (`description` 追加)
         - [x] 各ハンドラ/CronのDB対応
+    - [x] **機能追加**: タスクカテゴリ (`type`/`category`)
+        - [x] 実装計画作成 (`20251210_add_task_category.md`)
+        - [x] DBスキーマ更新 (`src/db/client.ts`)
+        - [x] 型定義更新 (`src/db/tasks.ts`)
+        - [x] コマンド更新 (`src/discord/commands.ts`)
+        - [x] ハンドラ更新 (`src/discord/handlers/taskHandler.ts`)
 - [x] ドキュメント作成
     - [x] `SETUP_GUIDE.md` (環境構築・デプロイ詳細手順書) の作成
 - [ ] コード管理 (ユーザー作業)

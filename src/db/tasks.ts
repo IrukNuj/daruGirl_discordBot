@@ -13,6 +13,8 @@ export type Task = {
   title: string;
   /** タスクの詳細説明 */
   description: string;
+  /** タスクのカテゴリ (例: 'やること', '映画') */
+  category: string;
   /** 進行ステータス */
   status: TaskStatus;
   /** 作成者のユーザーID/タグ */
@@ -29,8 +31,8 @@ export type Task = {
  */
 export const addTask = (task: Omit<Task, 'id' | 'created_at' | 'updated_at' | 'status'>): void => {
   const stmt = db.prepare(`
-    INSERT INTO tasks (guild_id, title, description, status, author, created_at, updated_at)
-    VALUES (@guild_id, @title, @description, 'TODO', @author, @created_at, @updated_at)
+    INSERT INTO tasks (guild_id, title, description, category, status, author, created_at, updated_at)
+    VALUES (@guild_id, @title, @description, @category, 'TODO', @author, @created_at, @updated_at)
   `);
 
   const now = new Date().toISOString();

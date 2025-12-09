@@ -4,7 +4,8 @@ import { COMMAND_NAMES } from '@/discord/constants.js';
 const commands = [
   new SlashCommandBuilder().setName(COMMAND_NAMES.TASK.ADD).setDescription('やることを追加するよ')
     .addStringOption(option => option.setName('内容').setDescription('タスクの内容').setRequired(true))
-    .addStringOption(option => option.setName('詳細').setDescription('タスクの詳細メモ').setRequired(false)),
+    .addStringOption(option => option.setName('詳細').setDescription('タスクの詳細メモ').setRequired(false))
+    .addStringOption(option => option.setName('カテゴリ').setDescription('タスクのカテゴリ (例: 買い物, 映画)').setRequired(false)),
   new SlashCommandBuilder().setName(COMMAND_NAMES.TASK.LIST).setDescription('やることのリストを表示するよ'),
   new SlashCommandBuilder().setName(COMMAND_NAMES.TASK.PICK).setDescription('ランダムにやることをとりだすよ'),
   new SlashCommandBuilder().setName(COMMAND_NAMES.IMAGE.ADD).setDescription('イラストをDriveに保存するよ').addAttachmentOption(option => option.setName('画像').setDescription('保存する画像').setRequired(true)).addStringOption(option => option.setName('メモ').setDescription('画像のメモ')),
