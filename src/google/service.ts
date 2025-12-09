@@ -1,5 +1,6 @@
 import { getGoogleContext } from 'google/auth.js';
-import { appendToGoogleSheet, fetchGoogleSheetValues } from 'google/sheets.js';
+import { appendToGoogleSheet, fetchGoogleSheetValues, clearGoogleSheet } from 'google/sheets.js';
+import { uploadFileToGoogleDrive, downloadToStream } from 'google/drive.js';
 import { uploadFileToGoogleDrive, downloadToStream } from 'google/drive.js';
 
 export const appendTask = async (task: string): Promise<void> =>
@@ -13,6 +14,22 @@ export const getRandomTask = async (): Promise<string | null> => {
     return tasks.length > 0
         ? tasks[Math.floor(Math.random() * tasks.length)]
         : null;
+};
+
+export const deleteTasks = async (tasksToDelete: string[]): Promise<void> => {
+	const context = getGoogleContext();
+	const currentTasks = await getTasks();
+
+	// 削除対象に含まれないものだけを残す
+	const newTasks = currentTasks.filter(task => !tasksToDelete.includes(task));
+
+	// A列を全クリアしてから書き直す (簡易実装)
+	await clearGoogleSheet(context, 'A:A');
+	if (newTasks.length > 0) {
+		// 1行ずつ配列にして渡す必要あり: [['foo'], ['bar']]
+		const values = newTasks.map(t => [t]);
+		await appendToGoogleSheet(context, 'A:A', values);
+	}
 };
 
 /** 画像のDL、Driveへの保存、シートへの記録を一括で行う */

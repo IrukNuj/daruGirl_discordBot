@@ -24,3 +24,11 @@ export const fetchGoogleSheetValues = async (context: GoogleContext, range: stri
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return res.data.values ? (res.data.values.flat() as string[]) : [];
 };
+
+export const clearGoogleSheet = async (context: GoogleContext, range: string): Promise<void> => {
+	const sheets = getSheetsService(context.auth);
+	await sheets.spreadsheets.values.clear({
+		spreadsheetId: context.spreadsheetId,
+		range,
+	});
+};

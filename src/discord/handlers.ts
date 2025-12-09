@@ -1,5 +1,5 @@
-import { ChatInputCommandInteraction, CacheType, EmbedBuilder, Colors } from 'discord.js';
-import { appendTask, getTasks, getRandomTask, uploadImage } from 'google/service.js';
+import { ChatInputCommandInteraction, CacheType, EmbedBuilder, Colors, StringSelectMenuInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, ComponentType } from 'discord.js';
+import { appendTask, getTasks, getRandomTask, uploadImage, deleteTasks } from 'google/service.js';
 import { setGuildSetting } from 'google/config.js';
 import { createTaskListEmbed } from './embeds.js';
 import { COMMAND_NAMES } from './constants.js';
@@ -107,10 +107,61 @@ export const handleConfigureReport: CommandHandler = async (interaction) => {
   }
 };
 
+/** /やりたいことさくじょ */
+export const handleDeleteTask: CommandHandler = async (interaction) => {
+  await interaction.deferReply({ ephemeral: true }); // 他の人に見えないように
+
+  const tasks = await getTasks();
+  if (tasks.length === 0) {
+     await interaction.editReply('現在リストは空です。');
+     return;
+  }
+
+  // 直近25件 (Discord制限)
+  const recentTasks = tasks.slice(0, 25);
+
+  const select = new StringSelectMenuBuilder()
+			.setCustomId('select_delete_task')
+			.setPlaceholder('削除するタスクを選択してください（複数選択可）')
+            .setMinValues(1)
+            .setMaxValues(recentTasks.length) // 全選択可能
+			.addOptions(
+				recentTasks.map(task =>
+                    new StringSelectMenuOptionBuilder()
+                        .setLabel(task.length > 20 ? task.substring(0, 20) + '...' : task)
+                        .setValue(task)
+                        .setDescription(task.length > 50 ? task.substring(0, 50) + '...' : task)
+                )
+			);
+
+    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
+
+    await interaction.editReply({
+        content: '削除する項目を選んでください（選択すると即座に処理されます）：',
+        components: [row]
+    });
+};
+
+/** Select Menu Interaction Handler */
+export const handleDeleteSelect = async (interaction: StringSelectMenuInteraction<CacheType>) => {
+    if (interaction.customId === 'select_delete_task') {
+        await interaction.deferReply({ ephemeral: true });
+
+        const selectedTasks = interaction.values;
+        await deleteTasks(selectedTasks);
+
+        // 元のメッセージのコンポーネント（メニュー）を無効化あるいは削除すると親切だが、今回は単純に完了通知
+        await interaction.editReply({
+            content: `✅ 以下の${selectedTasks.length}件を削除しました。\n` + selectedTasks.map(t => `・${t}`).join('\n')
+        });
+    }
+};
+
 export const commandHandlers: Record<string, CommandHandler> = {
   [COMMAND_NAMES.ADD_TASK]: handleAddTask,
   [COMMAND_NAMES.LIST_TASKS]: handleListTasks,
   [COMMAND_NAMES.PICK_TASK]: handlePickTask,
   [COMMAND_NAMES.ADD_IMAGE]: handleAddImage,
   [COMMAND_NAMES.CONFIGURE_REPORT]: handleConfigureReport,
+  [COMMAND_NAMES.DELETE_TASK]: handleDeleteTask,
 };

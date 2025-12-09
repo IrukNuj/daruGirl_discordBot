@@ -1,6 +1,7 @@
 import { Client, Interaction } from 'discord.js';
 import { registerGuildCommands } from 'discord/commands.js';
-import { commandHandlers } from 'discord/handlers.js';
+import { registerGuildCommands } from 'discord/commands.js';
+import { commandHandlers, handleDeleteSelect } from './handlers.js';
 
 export const handleReady = async (client: Client) => {
     console.log(`Logged in as ${client.user?.tag}!`);
@@ -14,6 +15,11 @@ export const handleReady = async (client: Client) => {
 };
 
 export const handleInteraction = async (interaction: Interaction) => {
+    if (interaction.isStringSelectMenu()) {
+        await handleDeleteSelect(interaction);
+        return;
+    }
+
     if (!interaction.isChatInputCommand()) return;
 
     const handler = commandHandlers[interaction.commandName];
