@@ -18,7 +18,7 @@ export const handleAddTask: CommandHandler = async (interaction) => {
 
   const embed = new EmbedBuilder()
     .setTitle('✅ 追加しました！')
-    .setDescription(`「**${task}**」をやりたいことリストに追加しました。`)
+    .setDescription(`「**${task}**」をやることリストに追加しました。`)
     .setColor(Colors.Green)
     .setTimestamp();
 
@@ -47,7 +47,7 @@ export const handlePickTask: CommandHandler = async (interaction) => {
          .setDescription(`これはいかがですか？\n\n**「${task}」**`);
   } else {
     embed.setTitle('😢 リストが空です')
-         .setDescription('まずは `/やりたいことついか` で追加してね！');
+         .setDescription('まずは `/やることついか` で追加してね！');
   }
 
   await interaction.editReply({ embeds: [embed] });
