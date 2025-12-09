@@ -1,21 +1,56 @@
+
 import { EmbedBuilder, Colors } from 'discord.js';
+// Task型をインポートして createListTasksEmbed で使用
+import { Task } from '@/db/tasks.js';
 
-export const createListTasksEmbed = (tasks: string[]): EmbedBuilder => {
-    const taskList = tasks.map(t => `・${t}`).join('\n') || '（まだ何もないよ！）';
-
-    return new EmbedBuilder()
+export const createListTasksEmbed = (tasks: Task[]): EmbedBuilder => {
+    const embed = new EmbedBuilder()
       .setTitle('📋 やることリスト')
-      .setDescription(taskList)
       .setColor(Colors.Blue)
       .setTimestamp();
+
+    if (tasks.length === 0) {
+        embed.setDescription('（まだ何もないよ！）');
+        return embed;
+    }
+
+    // 表示件数を25件に制限 (DiscordのField制限)
+    const recentTasks = tasks.slice(0, 25);
+
+    // 件数が多すぎる場合はメッセージを追加
+    if (tasks.length > 25) {
+        embed.setDescription(`※最新の25件を表示しています（全${tasks.length}件）`);
+    }
+
+    recentTasks.forEach(task => {
+        // ステータスの絵文字
+        const statusEmoji = task.status === 'DONE' ? '✅' : task.status === 'CHECK' ? '👀' : '⬜';
+        // 詳細ロジック: URLが含まれる場合はクリック可能になります
+        // DiscordのField Valueは空文字不可のため、空の場合はフォールバックします
+        const descValue = task.description ? task.description : '（詳細なし）';
+
+        embed.addFields({
+            name: `${statusEmoji} [${task.category || 'やること'}] ${task.title}`,
+            value: descValue
+        });
+    });
+
+    return embed;
 };
 
-export const createTaskAddedEmbed = (task: string): EmbedBuilder => {
-    return new EmbedBuilder()
+export const createTaskAddedEmbed = (title: string, category: string, description: string): EmbedBuilder => {
+    const embed = new EmbedBuilder()
     .setTitle('✅ 追加しました！')
-    .setDescription(`「**${task}**」をやることリストについかしたよ！`)
+    .setDescription(`「**${title}**」をやることリストについかしたよ！`)
     .setColor(Colors.Green)
     .setTimestamp();
+
+    embed.addFields(
+        { name: 'カテゴリ', value: category || 'やること', inline: true },
+        { name: '詳細', value: description || '（なし）', inline: false }
+    );
+
+    return embed;
 };
 
 export const createTaskPickedEmbed = (task: string | null): EmbedBuilder => {
@@ -54,25 +89,7 @@ export const createConfigUpdatedEmbed = (isEnable: boolean): EmbedBuilder => {
 };
 
 export const createTaskDeletedEmbed = (deletedTasks: string[]): string => {
-    // 削除完了はEmbedではなくテキストメッセージ（+リスト）で返していたが、
-    // ここで文字列生成ロジックだけ持っておく、あるいはEmbed化するかだが、
-    // 元のハンドラの実装がテキストだったので一旦テキスト生成ヘルパーとするか、
-    // 要件が「ほかのembedに関しても生成してください」なのでEmbed化を試みる。
-    // しかし元のUXを変えない範囲で、テキストメッセージ構築ロジックを返す。
-    // User requested "generate for other embeds", so returning Embed is safer if appropriate,
-    // but the delete handler used simple text content in `editReply` before.
-    // Let's stick to the previous implementation style for deletion (Message content)
-    // OR creates a simple embed for consistency?
-    // Given the trend, let's make it an Embed.
-    // BUT the previous implementation was: `✅ 以下の...` as `content`.
-    // I will return an Embed for consistency provided the user asked for it.
-
-    // Wait, let's keep it simple. If I change to Embed, I change the UX.
-    // The prompt says "generate for other embeds". The delete handler response WAS NOT an embed.
-    // So I might skip this one or just return the text formatter.
-    // Actually, looking at `handlers.ts`, `handleDeleteSelect` uses `await interaction.editReply({ content: ... })`.
-    // It is NOT an embed. So strictly speaking, I don't need to make an factory for it unless I convert it to Embed.
-    // I will SKIP delete for now as it's not an embed, or create a text helper?
-    // Let's create `createDeleteResultContent` just in case.
+    // 削除完了時のメッセージ生成
+    // 以前の実装に合わせてテキスト形式で返却します
     return `✅ 以下の${deletedTasks.length}件を削除しました。\n` + deletedTasks.map(t => `・${t}`).join('\n');
 };

@@ -1,6 +1,5 @@
 import { ChatInputCommandInteraction, CacheType, StringSelectMenuInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } from 'discord.js';
-import { ChatInputCommandInteraction, CacheType, StringSelectMenuInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } from 'discord.js';
-// Removed google/service.ts import
+// google/service.ts のインポートを削除 (移行完了のため)
 import { addTask, getTasks, getRandomTask, deleteTasksByTitle, Task } from '@/db/tasks.js';
 import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createTaskDeletedEmbed } from '@/discord/embeds.js';
 import { CommandHandler } from '@/discord/handlers/index.js';
@@ -28,10 +27,10 @@ export const handleAddTask: CommandHandler = async (interaction) => {
       title,
       description,
       category,
-      author: interaction.user.tag // or interaction.user.id
+      author: interaction.user.tag // または interaction.user.id
   });
 
-  const embed = createTaskAddedEmbed(title);
+  const embed = createTaskAddedEmbed(title, category, description);
   await interaction.editReply({ embeds: [embed] });
 };
 
@@ -41,13 +40,8 @@ export const handleListTasks: CommandHandler = async (interaction) => {
   if (!interaction.guildId) return;
 
   const tasks = getTasks(interaction.guildId);
-  // mapping Task objects to string for existing embed compatibility or updating embed
-  // For now, let's update call to pass Task objects if we update embed, OR map to string.
-  // The existing embed expects string[]. We should update embed later.
-  // Mapping to string format "[Category] Title [Status]"
-  const taskStrings = tasks.map(t => `[${t.category}] ${t.title} [${t.status}]`);
-
-  const embed = createListTasksEmbed(taskStrings);
+  // Taskオブジェクトを直接新しいWeb生成関数に渡す
+  const embed = createListTasksEmbed(tasks);
   await interaction.editReply({ embeds: [embed] });
 };
 
@@ -62,9 +56,14 @@ export const handlePickTask: CommandHandler = async (interaction) => {
       return;
   }
 
-  // existing embed expects string
+  // 以前のembedは文字列を期待していたため
   const embed = createTaskPickedEmbed(taskObj.title);
-  await interaction.editReply({ embeds: [embed] });
+
+  // OGP展開のためにURLが含まれていれば content にも含める
+  const urlMatch = taskObj.description ? taskObj.description.match(/(https?:\/\/[^\s]+)/) : null;
+  const content = urlMatch ? `これを見るよ！ ${urlMatch[0]}` : '';
+
+  await interaction.editReply({ content, embeds: [embed] });
 };
 
 /** /やること_さくじょ */
@@ -73,7 +72,7 @@ export const handleDeleteTask: CommandHandler = async (interaction) => {
 
   if (!interaction.guildId) return;
 
-  // Only TODO tasks? or all? Let's show all
+  // TODOのみか全件か？ 現状は全件表示
   const tasks = getTasks(interaction.guildId);
   if (tasks.length === 0) {
      await interaction.editReply('現在リストは空です。');
@@ -91,7 +90,7 @@ export const handleDeleteTask: CommandHandler = async (interaction) => {
 				recentTasks.map(task =>
                     new StringSelectMenuOptionBuilder()
                         .setLabel(task.title.substring(0, 25))
-                        .setValue(task.title) // Still using title for value for now to match handleDeleteSelect signature logic
+                        .setValue(task.title) // handleDeleteSelect との整合性のためタイトルをValueに使用
                         .setDescription(`Status: ${task.status}`)
                 )
 			);
@@ -104,7 +103,7 @@ export const handleDeleteTask: CommandHandler = async (interaction) => {
     });
 };
 
-/** Select Menu Interaction Handler */
+/** セレクトメニューのインタラクションハンドラ */
 export const handleDeleteSelect = async (interaction: StringSelectMenuInteraction<CacheType>) => {
     if (interaction.customId === 'select_delete_task') {
         await interaction.deferReply({ ephemeral: true });
