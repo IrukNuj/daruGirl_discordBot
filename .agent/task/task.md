@@ -33,7 +33,12 @@
     - [x] **バグ修正**: モジュールインポートパスを相対パスに修正
     - [x] **リファクタリング**: `handlers.ts` を機能別ファイル (`src/discord/handlers/`) に分割
     - [x] **リファクタリング**: インポートパスを `@/` エイリアス形式に変更 (絶対パス)
-    - [x] **リファクタリング**: インポートパスの拡張子 `.js` を削除
+    - [x] **DB移行**: Google Sheets -> SQLite
+        - [x] 実装計画 (`migration_to_sqlite.md`) 作成
+        - [x] `SETUP_GUIDE.md` 更新 (GCP手順追加)
+        - [x] DB層実装 (`src/db/*.ts`)
+        - [x] コマンド更新 (`description` 追加)
+        - [x] 各ハンドラ/CronのDB対応
 - [x] ドキュメント作成
     - [x] `SETUP_GUIDE.md` (環境構築・デプロイ詳細手順書) の作成
 - [ ] コード管理 (ユーザー作業)
@@ -48,6 +53,8 @@
     - [ ] `.env` への反映 (TOKEN, CLIENT_ID, GUILD_ID)
 - [ ] Google Workspace 準備 (ユーザー作業: 詳細手順はSETUP_GUIDE参照)
     - [ ] スプレッドシートの新規作成 & ID取得
+        - **[NOTE]** スプレッドシート自体はBotロジックからは切り離されましたが、画像保存用のDrive API認証にはまだService Accountが必要です。
+        - **[NOTE]** Config用シート等の作成は不要になりました (SQLite管理)。
     - [ ] イラスト保存用Driveフォルダの新規作成 & ID取得
     - [ ] `.env` への反映 (SPREADSHEET_ID, DRIVE_FOLDER_ID)
 - [ ] Google Cloud 設定 (ユーザー作業: 詳細手順はSETUP_GUIDE参照)
@@ -57,6 +64,7 @@
     - [ ] **重要**: シートとフォルダへService Accountメールアドレスを共有 (編集者権限)
 - [ ] 検証
     - [ ] ローカルでの起動確認 (`npm run dev`)
+        - **[IMPORTANT]** `npm install` (including `better-sqlite3`) is required.
     - [ ] コマンド動作確認
 - [ ] デプロイ (GCP Compute Engine)
     - [ ] VMセットアップスクリプト(startup-script)作成

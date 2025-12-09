@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-import { Credentials, GoogleContext } from '@/google/types';
+import { Credentials, GoogleContext } from '@/google/types.js';
 
 const SCOPES = [
   'https://www.googleapis.com/auth/spreadsheets',

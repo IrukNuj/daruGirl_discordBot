@@ -1,8 +1,8 @@
 import { ChatInputCommandInteraction, CacheType } from 'discord.js';
-import { COMMAND_NAMES } from '@/discord/constants';
-import { handleAddTask, handleListTasks, handlePickTask, handleDeleteTask, handleDeleteSelect } from '@/discord/handlers/taskHandler';
-import { handleAddImage } from '@/discord/handlers/imageHandler';
-import { handleConfigureReport } from '@/discord/handlers/reportHandler';
+import { COMMAND_NAMES } from '@/discord/constants.js';
+import { handleAddTask, handleListTasks, handlePickTask, handleDeleteTask, handleDeleteSelect } from '@/discord/handlers/taskHandler.js';
+import { handleAddImage } from '@/discord/handlers/imageHandler.js';
+import { handleConfigureReport } from '@/discord/handlers/reportHandler.js';
 
 export type CommandHandler = (interaction: ChatInputCommandInteraction<CacheType>) => Promise<void>;
 

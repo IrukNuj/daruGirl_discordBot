@@ -1,72 +1,103 @@
 import { ChatInputCommandInteraction, CacheType, StringSelectMenuInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } from 'discord.js';
-// Relative path from src/discord/handlers/taskHandler.ts to src/google/service.ts is ../../../google/service.js
-import { appendTask, getTasks, getRandomTask, deleteTasks } from '@/google/service';
-// Relative path to embeds is ../embeds.js
-import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createTaskDeletedEmbed } from '@/discord/embeds';
-import { CommandHandler } from '@/discord/handlers/index';
+import { ChatInputCommandInteraction, CacheType, StringSelectMenuInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } from 'discord.js';
+// Removed google/service.ts import
+import { addTask, getTasks, getRandomTask, deleteTasksByTitle, Task } from '@/db/tasks.js';
+import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createTaskDeletedEmbed } from '@/discord/embeds.js';
+import { CommandHandler } from '@/discord/handlers/index.js';
 
 /** /やること_ついか */
 export const handleAddTask: CommandHandler = async (interaction) => {
-  const task = interaction.options.getString('内容');
-  if (!task) {
+  const title = interaction.options.getString('内容');
+  const description = interaction.options.getString('詳細') || '';
+
+  if (!title) {
     await interaction.reply({ content: '内容が空だよ！', ephemeral: true });
     return;
   }
-  await interaction.deferReply();
-  await appendTask(task);
 
-  const embed = createTaskAddedEmbed(task);
+  await interaction.deferReply();
+
+  if (!interaction.guildId) {
+      await interaction.editReply('サーバー内でのみ使用できます。');
+      return;
+  }
+
+  addTask({
+      guild_id: interaction.guildId,
+      title,
+      description,
+      author: interaction.user.tag // or interaction.user.id
+  });
+
+  const embed = createTaskAddedEmbed(title);
   await interaction.editReply({ embeds: [embed] });
 };
 
 /** /やること_りすと */
 export const handleListTasks: CommandHandler = async (interaction) => {
   await interaction.deferReply();
-  const tasks = await getTasks();
-  const embed = createListTasksEmbed(tasks);
+  if (!interaction.guildId) return;
+
+  const tasks = getTasks(interaction.guildId);
+  // mapping Task objects to string for existing embed compatibility or updating embed
+  // For now, let's update call to pass Task objects if we update embed, OR map to string.
+  // The existing embed expects string[]. We should update embed later.
+  // Mapping to string format "Title (Status)"
+  const taskStrings = tasks.map(t => `${t.title} [${t.status}]`);
+
+  const embed = createListTasksEmbed(taskStrings);
   await interaction.editReply({ embeds: [embed] });
 };
 
 /** /やること_とりだし */
 export const handlePickTask: CommandHandler = async (interaction) => {
   await interaction.deferReply();
-  const task = await getRandomTask();
+  if (!interaction.guildId) return;
 
-  const embed = createTaskPickedEmbed(task);
+  const taskObj = getRandomTask(interaction.guildId);
+  if (!taskObj) {
+      await interaction.editReply('やることは全部終わったか、まだ登録されてないよ！');
+      return;
+  }
+
+  // existing embed expects string
+  const embed = createTaskPickedEmbed(taskObj.title);
   await interaction.editReply({ embeds: [embed] });
 };
 
 /** /やること_さくじょ */
 export const handleDeleteTask: CommandHandler = async (interaction) => {
-  await interaction.deferReply({ ephemeral: true }); // 他の人に見えないように
+  await interaction.deferReply({ ephemeral: true });
 
-  const tasks = await getTasks();
+  if (!interaction.guildId) return;
+
+  // Only TODO tasks? or all? Let's show all
+  const tasks = getTasks(interaction.guildId);
   if (tasks.length === 0) {
      await interaction.editReply('現在リストは空です。');
      return;
   }
 
-  // 直近25件 (Discord制限)
   const recentTasks = tasks.slice(0, 25);
 
   const select = new StringSelectMenuBuilder()
 			.setCustomId('select_delete_task')
-			.setPlaceholder('削除するタスクを選択してください（複数選択可）')
+			.setPlaceholder('削除するタスクを選択してください')
             .setMinValues(1)
-            .setMaxValues(recentTasks.length) // 全選択可能
+            .setMaxValues(recentTasks.length)
 			.addOptions(
 				recentTasks.map(task =>
                     new StringSelectMenuOptionBuilder()
-                        .setLabel(task.length > 20 ? task.substring(0, 20) + '...' : task)
-                        .setValue(task)
-                        .setDescription(task.length > 50 ? task.substring(0, 50) + '...' : task)
+                        .setLabel(task.title.substring(0, 25))
+                        .setValue(task.title) // Still using title for value for now to match handleDeleteSelect signature logic
+                        .setDescription(`Status: ${task.status}`)
                 )
 			);
 
     const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
 
     await interaction.editReply({
-        content: '削除する項目を選んでください（選択すると即座に処理されます）：',
+        content: '削除する項目を選んでください：',
         components: [row]
     });
 };
@@ -76,12 +107,13 @@ export const handleDeleteSelect = async (interaction: StringSelectMenuInteractio
     if (interaction.customId === 'select_delete_task') {
         await interaction.deferReply({ ephemeral: true });
 
-        const selectedTasks = interaction.values;
-        await deleteTasks(selectedTasks);
+        if (!interaction.guildId) return;
 
-        // 元のメッセージのコンポーネント（メニュー）を無効化あるいは削除すると親切だが、今回は単純に完了通知
+        const selectedTitles = interaction.values;
+        deleteTasksByTitle(interaction.guildId, selectedTitles);
+
         await interaction.editReply({
-            content: createTaskDeletedEmbed(selectedTasks)
+            content: createTaskDeletedEmbed(selectedTitles)
         });
     }
 };

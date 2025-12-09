@@ -1,7 +1,8 @@
 import { ChatInputCommandInteraction, CacheType } from 'discord.js';
-import { uploadImage } from '@/google/service';
-import { createImageUploadedEmbed } from '@/discord/embeds';
-import { CommandHandler } from '@/discord/handlers/index';
+import { uploadImageToDrive } from '@/google/service.js';
+import { saveImageMetadata } from '@/db/images.js';
+import { createImageUploadedEmbed } from '@/discord/embeds.js';
+import { CommandHandler } from '@/discord/handlers/index.js';
 
 /** /いらすと_ついか */
 export const handleAddImage: CommandHandler = async (interaction) => {
@@ -14,8 +15,15 @@ export const handleAddImage: CommandHandler = async (interaction) => {
   }
 
   await interaction.deferReply();
-  const link = await uploadImage(image.url, memo);
 
-  const embed = createImageUploadedEmbed(link, memo, image.url);
+  if (!interaction.guildId) {
+      await interaction.editReply('サーバー内でのみ使用できます。');
+      return;
+  }
+
+  const { webViewLink } = await uploadImageToDrive(image.url);
+  saveImageMetadata(interaction.guildId, webViewLink, memo, interaction.user.tag);
+
+  const embed = createImageUploadedEmbed(webViewLink, memo, image.url);
   await interaction.editReply({ embeds: [embed] });
 };

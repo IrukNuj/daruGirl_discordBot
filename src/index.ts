@@ -1,9 +1,13 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
-import { handleReady, handleInteraction } from '@/discord/events';
-import { setupScheduledTasks } from '@/discord/cron';
+import { handleReady, handleInteraction } from '@/discord/events.js';
+import { setupScheduledTasks } from '@/discord/cron.js';
+import { initDb } from '@/db/client.js';
 
 dotenv.config();
+
+// Initialize Database
+initDb();
 
 const main = async () => {
     const client = new Client({ intents: [GatewayIntentBits.Guilds] });

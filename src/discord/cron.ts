@@ -1,8 +1,8 @@
 import cron from 'node-cron';
 import { Client, TextChannel } from 'discord.js';
-import { getTasks } from '@/google/service';
-import { fetchGuildSettings } from '@/google/config';
-import { createListTasksEmbed } from '@/discord/embeds';
+import { getTasks } from '@/db/tasks.js';
+import { fetchGuildSettings } from '@/db/config.js';
+import { createListTasksEmbed } from '@/discord/embeds.js';
 
 export const setupScheduledTasks = (client: Client) => {
     // 毎日 12:00 JST に実行
@@ -11,16 +11,17 @@ export const setupScheduledTasks = (client: Client) => {
 
         try {
             // 1. 設定の一括読み込み
-            const settings = await fetchGuildSettings();
+            const settings = fetchGuildSettings(); // await removed as DB is sync
 
-            // 2. タスクリストの取得 (全サーバー共通)
-            const tasks = await getTasks();
-            const embed = createListTasksEmbed(tasks);
-
-            // 3. 参加サーバーをループして送信
-            for (const [guildId, guild] of client.guilds.cache) {
-                // 設定が有効かどうか確認 (デフォルトは無効)
+            // 2. 参加サーバーをループして処理
+             for (const [guildId, guild] of client.guilds.cache) {
+                // 設定確認
                 if (settings.get(guildId)) {
+                    // サーバーごとのタスク取得
+                    const tasks = getTasks(guildId);
+                    const taskStrings = tasks.map(t => `${t.title} [${t.status}]`);
+                    const embed = createListTasksEmbed(taskStrings);
+
                     const channel = guild.systemChannel;
                     if (channel && channel instanceof TextChannel) {
                         try {

@@ -13,7 +13,7 @@ export const createListTasksEmbed = (tasks: string[]): EmbedBuilder => {
 export const createTaskAddedEmbed = (task: string): EmbedBuilder => {
     return new EmbedBuilder()
     .setTitle('✅ 追加しました！')
-    .setDescription(`「**${task}**」をやることリストに追加しました。`)
+    .setDescription(`「**${task}**」をやることリストについかしたよ！`)
     .setColor(Colors.Green)
     .setTimestamp();
 };
