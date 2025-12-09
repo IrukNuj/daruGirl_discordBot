@@ -6,7 +6,7 @@ import { COMMAND_NAMES } from './constants.js';
 
 export type CommandHandler = (interaction: ChatInputCommandInteraction<CacheType>) => Promise<void>;
 
-/** /やりたいことついか */
+/** /やること_ついか */
 export const handleAddTask: CommandHandler = async (interaction) => {
   const task = interaction.options.getString('内容');
   if (!task) {
@@ -20,7 +20,7 @@ export const handleAddTask: CommandHandler = async (interaction) => {
   await interaction.editReply({ embeds: [embed] });
 };
 
-/** /やりたいことりすと */
+/** /やること_りすと */
 export const handleListTasks: CommandHandler = async (interaction) => {
   await interaction.deferReply();
   const tasks = await getTasks();
@@ -28,7 +28,7 @@ export const handleListTasks: CommandHandler = async (interaction) => {
   await interaction.editReply({ embeds: [embed] });
 };
 
-/** /やりたいこととりだし */
+/** /やること_とりだし */
 export const handlePickTask: CommandHandler = async (interaction) => {
   await interaction.deferReply();
   const task = await getRandomTask();
@@ -37,7 +37,7 @@ export const handlePickTask: CommandHandler = async (interaction) => {
   await interaction.editReply({ embeds: [embed] });
 };
 
-/** /いらすとついか */
+/** /いらすと_ついか */
 export const handleAddImage: CommandHandler = async (interaction) => {
   const image = interaction.options.getAttachment('画像');
   const memo = interaction.options.getString('メモ') || '';
@@ -77,7 +77,7 @@ export const handleConfigureReport: CommandHandler = async (interaction) => {
   }
 };
 
-/** /やりたいことさくじょ */
+/** /やること_さくじょ */
 export const handleDeleteTask: CommandHandler = async (interaction) => {
   await interaction.deferReply({ ephemeral: true }); // 他の人に見えないように
 
@@ -128,10 +128,10 @@ export const handleDeleteSelect = async (interaction: StringSelectMenuInteractio
 };
 
 export const commandHandlers: Record<string, CommandHandler> = {
-  [COMMAND_NAMES.ADD_TASK]: handleAddTask,
-  [COMMAND_NAMES.LIST_TASKS]: handleListTasks,
-  [COMMAND_NAMES.PICK_TASK]: handlePickTask,
-  [COMMAND_NAMES.ADD_IMAGE]: handleAddImage,
-  [COMMAND_NAMES.CONFIGURE_REPORT]: handleConfigureReport,
-  [COMMAND_NAMES.DELETE_TASK]: handleDeleteTask,
+  [COMMAND_NAMES.TASK.ADD]: handleAddTask,
+  [COMMAND_NAMES.TASK.LIST]: handleListTasks,
+  [COMMAND_NAMES.TASK.PICK]: handlePickTask,
+  [COMMAND_NAMES.IMAGE.ADD]: handleAddImage,
+  [COMMAND_NAMES.REPORT.CONFIGURE]: handleConfigureReport,
+  [COMMAND_NAMES.TASK.DELETE]: handleDeleteTask,
 };

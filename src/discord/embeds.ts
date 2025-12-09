@@ -28,7 +28,7 @@ export const createTaskPickedEmbed = (task: string | null): EmbedBuilder => {
              .setDescription(`これはいかがですか？\n\n**「${task}」**`);
     } else {
         embed.setTitle('😢 リストが空です')
-             .setDescription('まずは `/やることついか` で追加してね！');
+             .setDescription('まずは `/やること_ついか` で追加してね！');
     }
     return embed;
 };
