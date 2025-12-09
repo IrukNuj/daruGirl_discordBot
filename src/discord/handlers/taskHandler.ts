@@ -1,10 +1,9 @@
-import { ChatInputCommandInteraction, CacheType, EmbedBuilder, Colors, StringSelectMenuInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, ComponentType } from 'discord.js';
-import { appendTask, getTasks, getRandomTask, uploadImage, deleteTasks } from '../google/service.js';
-import { setGuildSetting } from '../google/config.js';
-import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createImageUploadedEmbed, createConfigUpdatedEmbed, createTaskDeletedEmbed } from './embeds.js';
-import { COMMAND_NAMES } from './constants.js';
-
-export type CommandHandler = (interaction: ChatInputCommandInteraction<CacheType>) => Promise<void>;
+import { ChatInputCommandInteraction, CacheType, StringSelectMenuInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } from 'discord.js';
+// Relative path from src/discord/handlers/taskHandler.ts to src/google/service.ts is ../../../google/service.js
+import { appendTask, getTasks, getRandomTask, deleteTasks } from '../../google/service.js';
+// Relative path to embeds is ../embeds.js
+import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createTaskDeletedEmbed } from '../embeds.js';
+import { CommandHandler } from './index.js';
 
 /** /やること_ついか */
 export const handleAddTask: CommandHandler = async (interaction) => {
@@ -35,46 +34,6 @@ export const handlePickTask: CommandHandler = async (interaction) => {
 
   const embed = createTaskPickedEmbed(task);
   await interaction.editReply({ embeds: [embed] });
-};
-
-/** /いらすと_ついか */
-export const handleAddImage: CommandHandler = async (interaction) => {
-  const image = interaction.options.getAttachment('画像');
-  const memo = interaction.options.getString('メモ') || '';
-
-  if (!image || !image.contentType?.startsWith('image/')) {
-    await interaction.reply({ content: '画像ファイルを選択してね！', ephemeral: true });
-    return;
-  }
-
-  await interaction.deferReply();
-  const link = await uploadImage(image.url, memo);
-
-  const embed = createImageUploadedEmbed(link, memo, image.url);
-  await interaction.editReply({ embeds: [embed] });
-};
-
-/** /レポート設定 */
-export const handleConfigureReport: CommandHandler = async (interaction) => {
-  const status = interaction.options.getString('状態');
-  const isEnable = status === 'enable';
-
-  if (!interaction.guildId) {
-    await interaction.reply({ content: 'サーバー内でのみ実行できます。', ephemeral: true });
-    return;
-  }
-
-  await interaction.deferReply();
-
-  try {
-    await setGuildSetting(interaction.guildId, isEnable);
-
-    const embed = createConfigUpdatedEmbed(isEnable);
-    await interaction.editReply({ embeds: [embed] });
-  } catch (e) {
-    console.error(e);
-    await interaction.editReply('設定の保存に失敗しました。');
-  }
 };
 
 /** /やること_さくじょ */
@@ -125,13 +84,4 @@ export const handleDeleteSelect = async (interaction: StringSelectMenuInteractio
             content: createTaskDeletedEmbed(selectedTasks)
         });
     }
-};
-
-export const commandHandlers: Record<string, CommandHandler> = {
-  [COMMAND_NAMES.TASK.ADD]: handleAddTask,
-  [COMMAND_NAMES.TASK.LIST]: handleListTasks,
-  [COMMAND_NAMES.TASK.PICK]: handlePickTask,
-  [COMMAND_NAMES.IMAGE.ADD]: handleAddImage,
-  [COMMAND_NAMES.REPORT.CONFIGURE]: handleConfigureReport,
-  [COMMAND_NAMES.TASK.DELETE]: handleDeleteTask,
 };
