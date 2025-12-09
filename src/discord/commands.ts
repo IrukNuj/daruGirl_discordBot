@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, REST, Routes } from 'discord.js';
-import { COMMAND_NAMES } from '@/discord/constants.js';
+import { COMMAND_NAMES } from '@/discord/constants';
 
 const commands = [
   new SlashCommandBuilder().setName(COMMAND_NAMES.TASK.ADD).setDescription('タスクを追加します').addStringOption(option => option.setName('内容').setDescription('タスクの内容').setRequired(true)),

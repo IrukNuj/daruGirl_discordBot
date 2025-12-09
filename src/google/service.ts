@@ -1,6 +1,6 @@
-import { getGoogleContext } from '@/google/auth.js';
-import { appendToGoogleSheet, fetchGoogleSheetValues, clearGoogleSheet } from '@/google/sheets.js';
-import { uploadFileToGoogleDrive, downloadToStream } from '@/google/drive.js';
+import { getGoogleContext } from '@/google/auth';
+import { appendToGoogleSheet, fetchGoogleSheetValues, clearGoogleSheet } from '@/google/sheets';
+import { uploadFileToGoogleDrive, downloadToStream } from '@/google/drive';
 
 export const appendTask = async (task: string): Promise<void> =>
     appendToGoogleSheet(getGoogleContext(), 'A:A', [[task]]);

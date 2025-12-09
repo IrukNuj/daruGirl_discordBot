@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, CacheType } from 'discord.js';
-import { setGuildSetting } from '@/google/config.js';
-import { createConfigUpdatedEmbed } from '@/discord/embeds.js';
-import { CommandHandler } from '@/discord/handlers/index.js';
+import { setGuildSetting } from '@/google/config';
+import { createConfigUpdatedEmbed } from '@/discord/embeds';
+import { CommandHandler } from '@/discord/handlers/index';
 
 /** /れぽーと_せってい */
 export const handleConfigureReport: CommandHandler = async (interaction) => {

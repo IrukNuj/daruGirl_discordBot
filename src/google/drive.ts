@@ -2,7 +2,7 @@ import { google, drive_v3 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import axios from 'axios';
 import { Readable } from 'stream';
-import { GoogleContext } from '@/google/types.js';
+import { GoogleContext } from '@/google/types';
 
 const getDriveService = (auth: OAuth2Client): drive_v3.Drive => google.drive({ version: 'v3', auth });
 

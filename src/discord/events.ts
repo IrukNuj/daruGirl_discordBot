@@ -1,6 +1,6 @@
 import { Client, Interaction } from 'discord.js';
-import { registerGuildCommands } from '@/discord/commands.js';
-import { commandHandlers, handleDeleteSelect } from '@/discord/handlers/index.js';
+import { registerGuildCommands } from '@/discord/commands';
+import { commandHandlers, handleDeleteSelect } from '@/discord/handlers/index';
 
 export const handleReady = async (client: Client) => {
     console.log(`Logged in as ${client.user?.tag}!`);
