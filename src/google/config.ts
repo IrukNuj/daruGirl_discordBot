@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
-import { getGoogleContext } from '@/google/auth';
-import { fetchGoogleSheetValues, appendToGoogleSheet } from '@/google/sheets';
+import { getGoogleContext } from '@/google/auth.js';
+import { fetchGoogleSheetValues, appendToGoogleSheet } from '@/google/sheets.js';
 
 const CONFIG_SHEET_NAME = 'Config';
 
