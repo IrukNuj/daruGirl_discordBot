@@ -1,8 +1,8 @@
 import cron from 'node-cron';
 import { Client, TextChannel } from 'discord.js';
-import { getTasks } from '../google/service.js';
-import { fetchGuildSettings } from '../google/config.js';
-import { createListTasksEmbed } from './embeds.js';
+import { getTasks } from '@/google/service.js';
+import { fetchGuildSettings } from '@/google/config.js';
+import { createListTasksEmbed } from '@/discord/embeds.js';
 
 export const setupScheduledTasks = (client: Client) => {
     // 毎日 12:00 JST に実行

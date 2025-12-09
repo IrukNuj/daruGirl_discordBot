@@ -1,11 +1,3 @@
-import { getGoogleContext } from './auth.js';
-import { fetchGoogleSheetValues, appendToGoogleSheet } from './sheets.js';
-import { google } from 'googleapis';
-
-const CONFIG_SHEET_NAME = 'Config';
-
-/** 設定データ: GuildID -> Enabled */
-export type GuildSettings = Map<string, boolean>;
 
 /** コンフィグ設定を取得 (Read) */
 export const fetchGuildSettings = async (): Promise<GuildSettings> => {

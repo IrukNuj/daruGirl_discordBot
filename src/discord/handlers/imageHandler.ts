@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, CacheType } from 'discord.js';
-import { uploadImage } from '../../google/service.js';
-import { createImageUploadedEmbed } from '../embeds.js';
-import { CommandHandler } from './index.js';
+import { uploadImage } from '@/google/service.js';
+import { createImageUploadedEmbed } from '@/discord/embeds.js';
+import { CommandHandler } from '@/discord/handlers/index.js';
 
 /** /いらすと_ついか */
 export const handleAddImage: CommandHandler = async (interaction) => {

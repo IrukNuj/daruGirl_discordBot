@@ -1,9 +1,9 @@
 import { ChatInputCommandInteraction, CacheType, StringSelectMenuInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } from 'discord.js';
 // Relative path from src/discord/handlers/taskHandler.ts to src/google/service.ts is ../../../google/service.js
-import { appendTask, getTasks, getRandomTask, deleteTasks } from '../../google/service.js';
+import { appendTask, getTasks, getRandomTask, deleteTasks } from '@/google/service.js';
 // Relative path to embeds is ../embeds.js
-import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createTaskDeletedEmbed } from '../embeds.js';
-import { CommandHandler } from './index.js';
+import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createTaskDeletedEmbed } from '@/discord/embeds.js';
+import { CommandHandler } from '@/discord/handlers/index.js';
 
 /** /やること_ついか */
 export const handleAddTask: CommandHandler = async (interaction) => {
