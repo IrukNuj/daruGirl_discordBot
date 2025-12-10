@@ -48,9 +48,19 @@ export const addTask = (task: Omit<Task, 'id' | 'created_at' | 'updated_at' | 's
  * @param guildId - サーバーID
  * @returns 作成日時の降順でソートされたタスク配列
  */
-export const getTasks = (guildId: string): Task[] => {
-  const stmt = db.prepare('SELECT * FROM tasks WHERE guild_id = ? ORDER BY created_at DESC');
-  return stmt.all(guildId) as Task[];
+export const getTasks = (guildId: string, category?: string): Task[] => {
+  let query = 'SELECT * FROM tasks WHERE guild_id = ?';
+  const params: string[] = [guildId];
+
+  if (category) {
+    query += ' AND category = ?';
+    params.push(category);
+  }
+
+  query += ' ORDER BY created_at DESC';
+
+  const stmt = db.prepare(query);
+  return stmt.all(...params) as Task[];
 };
 
 /**
@@ -58,9 +68,19 @@ export const getTasks = (guildId: string): Task[] => {
  * @param guildId - サーバーID
  * @returns ランダムなタスク、または存在しない場合は null
  */
-export const getRandomTask = (guildId: string): Task | null => {
-  const stmt = db.prepare("SELECT * FROM tasks WHERE guild_id = ? AND status = 'TODO' ORDER BY RANDOM() LIMIT 1");
-  return (stmt.get(guildId) as Task) || null;
+export const getRandomTask = (guildId: string, category?: string): Task | null => {
+  let query = "SELECT * FROM tasks WHERE guild_id = ? AND status = 'TODO'";
+  const params: string[] = [guildId];
+
+  if (category) {
+    query += ' AND category = ?';
+    params.push(category);
+  }
+
+  query += ' ORDER BY RANDOM() LIMIT 1';
+
+  const stmt = db.prepare(query);
+  return (stmt.get(...params) as Task) || null;
 };
 
 /**
@@ -69,10 +89,24 @@ export const getRandomTask = (guildId: string): Task | null => {
  * @param guildId - サーバーID
  * @param titles - 削除対象のタイトル配列
  */
-export const deleteTasksByTitle = (guildId: string, titles: string[]): void => {
-  const placeholders = titles.map(() => '?').join(',');
-  const stmt = db.prepare(`DELETE FROM tasks WHERE guild_id = ? AND title IN (${placeholders})`);
-  stmt.run(guildId, ...titles);
+// deleteTasksByTitle is deprecated/unused now, replacing or adding new logic
+/**
+ * 指定されたIDのタスクを取得します。
+ */
+export const getTasksByIds = (guildId: string, ids: number[]): Task[] => {
+  const placeholders = ids.map(() => '?').join(',');
+  const stmt = db.prepare(`SELECT * FROM tasks WHERE guild_id = ? AND id IN (${placeholders})`);
+  return stmt.all(guildId, ...ids) as Task[];
+};
+
+/**
+ * 指定されたIDのタスクを完了（DONE）にします。
+ */
+export const completeTasksByIds = (guildId: string, ids: number[]): void => {
+  const placeholders = ids.map(() => '?').join(',');
+  const now = new Date().toISOString();
+  const stmt = db.prepare(`UPDATE tasks SET status = 'DONE', updated_at = ? WHERE guild_id = ? AND id IN (${placeholders})`);
+  stmt.run(now, guildId, ...ids);
 };
 
 /**

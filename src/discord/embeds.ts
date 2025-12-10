@@ -53,14 +53,25 @@ export const createTaskAddedEmbed = (title: string, category: string, descriptio
     return embed;
 };
 
-export const createTaskPickedEmbed = (task: string | null): EmbedBuilder => {
+export const createTaskPickedEmbed = (task: Task | null): EmbedBuilder => {
     const embed = new EmbedBuilder()
         .setColor(Colors.Gold)
         .setTimestamp();
 
     if (task) {
+        // URL抽出
+        const urlMatch = task.description?.match(/(https?:\/\/[^\s]+)/);
+        const url = urlMatch ? urlMatch[0] : null;
+
+        // タイトルをリンク化
+        const displayTitle = url ? `[${task.title}](${url})` : task.title;
+
         embed.setTitle('🎲 今日のご提案')
-             .setDescription(`これはいかがですか？\n\n**「${task}」**`);
+             .setDescription(`これはいかがですか？\n\n**「${displayTitle}」**`)
+             .addFields(
+                { name: 'カテゴリ', value: task.category || 'やること', inline: true },
+                { name: '詳細', value: task.description || '（なし）', inline: false }
+            );
     } else {
         embed.setTitle('😢 リストが空です')
              .setDescription('まずは `/やること_ついか` で追加してね！');
@@ -88,8 +99,7 @@ export const createConfigUpdatedEmbed = (isEnable: boolean): EmbedBuilder => {
       .setTimestamp();
 };
 
-export const createTaskDeletedEmbed = (deletedTasks: string[]): string => {
-    // 削除完了時のメッセージ生成
-    // 以前の実装に合わせてテキスト形式で返却します
-    return `✅ 以下の${deletedTasks.length}件を削除しました。\n` + deletedTasks.map(t => `・${t}`).join('\n');
+export const createTaskCompletedMessage = (completedTasks: string[]): string => {
+    // 完了時のメッセージ生成
+    return `✅ 以下の${completedTasks.length}件を完了（DONE）にしました。\n` + completedTasks.map(t => `・${t}`).join('\n');
 };
