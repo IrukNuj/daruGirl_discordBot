@@ -40,10 +40,7 @@ export const setGuildSetting = async (guildId: string, isEnabled: boolean): Prom
     // 1. 全行読んで対象の行を探す (非効率だがDBがないためこの方法をとる)
     const rows = await fetchGoogleSheetValues(context, `${CONFIG_SHEET_NAME}!A:A`);
 
-    let rowIndex = -1;
-    if (rows) {
-        rowIndex = rows.findIndex(row => row[0] === guildId);
-    }
+    const rowIndex = rows ? rows.findIndex(row => row[0] === guildId) : -1;
 
     const value = isEnabled ? 'TRUE' : 'FALSE';
 

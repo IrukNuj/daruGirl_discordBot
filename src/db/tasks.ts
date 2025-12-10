@@ -49,15 +49,14 @@ export const addTask = (task: Omit<Task, 'id' | 'created_at' | 'updated_at' | 's
  * @returns 作成日時の降順でソートされたタスク配列
  */
 export const getTasks = (guildId: string, category?: string): Task[] => {
-  let query = 'SELECT * FROM tasks WHERE guild_id = ?';
-  const params: string[] = [guildId];
-
-  if (category) {
-    query += ' AND category = ?';
-    params.push(category);
-  }
-
-  query += ' ORDER BY created_at DESC';
+  const queryParts = [
+    'SELECT * FROM tasks',
+    'WHERE guild_id = ?',
+    ...(category ? ['AND category = ?'] : []),
+    'ORDER BY created_at DESC'
+  ];
+  const query = queryParts.join(' ');
+  const params = [guildId, ...(category ? [category] : [])];
 
   const stmt = db.prepare(query);
   return stmt.all(...params) as Task[];
@@ -69,15 +68,14 @@ export const getTasks = (guildId: string, category?: string): Task[] => {
  * @returns ランダムなタスク、または存在しない場合は null
  */
 export const getRandomTask = (guildId: string, category?: string): Task | null => {
-  let query = "SELECT * FROM tasks WHERE guild_id = ? AND status = 'TODO'";
-  const params: string[] = [guildId];
-
-  if (category) {
-    query += ' AND category = ?';
-    params.push(category);
-  }
-
-  query += ' ORDER BY RANDOM() LIMIT 1';
+  const queryParts = [
+    'SELECT * FROM tasks',
+    'WHERE guild_id = ? AND status = \'TODO\'',
+    ...(category ? ['AND category = ?'] : []),
+    'ORDER BY RANDOM() LIMIT 1'
+  ];
+  const query = queryParts.join(' ');
+  const params = [guildId, ...(category ? [category] : [])];
 
   const stmt = db.prepare(query);
   return (stmt.get(...params) as Task) || null;

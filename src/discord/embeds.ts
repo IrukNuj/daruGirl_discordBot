@@ -29,8 +29,12 @@ export const createListTasksEmbed = (tasks: Task[]): EmbedBuilder => {
         // DiscordのField Valueは空文字不可のため、空の場合はフォールバックします
         const descValue = task.description ? task.description : '（詳細なし）';
 
+        // カテゴリ表示ロジック: 'やること'の場合は表示しない
+        const category = task.category || 'やること';
+        const categoryDisplay = category === 'やること' ? '' : `[${category}] `;
+
         embed.addFields({
-            name: `${statusEmoji} [${task.category || 'やること'}] ${task.title}`,
+            name: `${statusEmoji} ${categoryDisplay}${task.title}`,
             value: descValue
         });
     });
