@@ -2,6 +2,7 @@
 import { EmbedBuilder, Colors } from 'discord.js';
 // Task型をインポートして createListTasksEmbed で使用
 import { Task } from '@/db/tasks.js';
+import { DEFAULT_CATEGORY } from '@/discord/constants.js';
 
 export const createListTasksEmbed = (tasks: Task[]): EmbedBuilder => {
     const embed = new EmbedBuilder()
@@ -30,8 +31,8 @@ export const createListTasksEmbed = (tasks: Task[]): EmbedBuilder => {
         const descValue = task.description ? task.description : '（詳細なし）';
 
         // カテゴリ表示ロジック: 'やること'の場合は表示しない
-        const category = task.category || 'やること';
-        const categoryDisplay = category === 'やること' ? '' : `[${category}] `;
+        const category = task.category || DEFAULT_CATEGORY;
+        const categoryDisplay = category === DEFAULT_CATEGORY ? '' : `[${category}] `;
 
         embed.addFields({
             name: `${statusEmoji} ${categoryDisplay}${task.title}`,
@@ -50,7 +51,7 @@ export const createTaskAddedEmbed = (title: string, category: string, descriptio
     .setTimestamp();
 
     embed.addFields(
-        { name: 'カテゴリ', value: category || 'やること', inline: true },
+        { name: 'カテゴリ', value: category || DEFAULT_CATEGORY, inline: true },
         { name: '詳細', value: description || '（なし）', inline: false }
     );
 
@@ -73,7 +74,7 @@ export const createTaskPickedEmbed = (task: Task | null): EmbedBuilder => {
         embed.setTitle('🎲 今日のご提案')
              .setDescription(`これはいかがですか？\n\n**「${displayTitle}」**`)
              .addFields(
-                { name: 'カテゴリ', value: task.category || 'やること', inline: true },
+                { name: 'カテゴリ', value: task.category || DEFAULT_CATEGORY, inline: true },
                 { name: '詳細', value: task.description || '（なし）', inline: false }
             );
     } else {

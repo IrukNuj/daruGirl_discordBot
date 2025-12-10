@@ -12,3 +12,5 @@ export const COMMAND_NAMES = {
     CONFIGURE: 'れぽーと_せってい',
   },
 } as const;
+
+export const DEFAULT_CATEGORY = 'やること';

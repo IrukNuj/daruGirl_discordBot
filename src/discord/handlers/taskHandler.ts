@@ -2,13 +2,15 @@ import { ChatInputCommandInteraction, CacheType, StringSelectMenuInteraction, St
 // google/service.ts のインポートを削除 (移行完了のため)
 import { addTask, getTasks, getRandomTask, getTasksByIds, completeTasksByIds, Task } from '@/db/tasks.js';
 import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createTaskCompletedMessage } from '@/discord/embeds.js';
+import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createTaskCompletedMessage } from '@/discord/embeds.js';
 import { CommandHandler } from '@/discord/handlers/index.js';
+import { DEFAULT_CATEGORY } from '@/discord/constants.js';
 
 /** /やること_ついか */
 export const handleAddTask: CommandHandler = async (interaction) => {
   const title = interaction.options.getString('内容');
   const description = interaction.options.getString('詳細') || '';
-  const category = interaction.options.getString('カテゴリ') || 'やること';
+  const category = interaction.options.getString('カテゴリ') || DEFAULT_CATEGORY;
 
   if (!title) {
     await interaction.reply({ content: '内容が空だよ！', ephemeral: true });

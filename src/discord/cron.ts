@@ -3,6 +3,7 @@ import { Client, TextChannel } from 'discord.js';
 import { getTasks } from '@/db/tasks.js';
 import { fetchGuildSettings } from '@/db/config.js';
 import { createListTasksEmbed } from '@/discord/embeds.js';
+import { DEFAULT_CATEGORY } from '@/discord/constants.js';
 
 export const setupScheduledTasks = (client: Client) => {
     // 毎日 12:00 JST に実行
@@ -17,8 +18,8 @@ export const setupScheduledTasks = (client: Client) => {
              for (const [guildId, guild] of client.guilds.cache) {
                 // 設定確認
                 if (settings.get(guildId)) {
-                    // サーバーごとのタスク取得
-                    const tasks = getTasks(guildId);
+                    // サーバーごとのタスク取得 (レポートはデフォルトカテゴリのみ)
+                    const tasks = getTasks(guildId, DEFAULT_CATEGORY);
                     const embed = createListTasksEmbed(tasks);
 
                     const channel = guild.systemChannel;
