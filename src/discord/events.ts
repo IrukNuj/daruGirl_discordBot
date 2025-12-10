@@ -4,13 +4,29 @@ import { commandHandlers, handleDeleteSelect } from '@/discord/handlers/index.js
 
 export const handleReady = async (client: Client) => {
     console.log(`Logged in as ${client.user?.tag}!`);
-    const { DISCORD_TOKEN, DISCORD_CLIENT_ID, DISCORD_GUILD_ID } = process.env;
+    const { DISCORD_TOKEN, DISCORD_CLIENT_ID } = process.env;
 
-    if (DISCORD_TOKEN && DISCORD_CLIENT_ID && DISCORD_GUILD_ID) {
-        await registerGuildCommands(DISCORD_TOKEN, DISCORD_CLIENT_ID, DISCORD_GUILD_ID);
-    } else {
-        console.error('Environment variables missing: DISCORD_TOKEN, DISCORD_CLIENT_ID, or DISCORD_GUILD_ID');
+    if (!DISCORD_TOKEN || !DISCORD_CLIENT_ID) {
+        console.error('Environment variables missing: DISCORD_TOKEN or DISCORD_CLIENT_ID');
+        return;
     }
+
+    // 参加している全サーバーにコマンドを登録
+    const registerPromises = client.guilds.cache.map(guild => {
+        console.log(`Registering commands for guild: ${guild.name} (${guild.id})`);
+        return registerGuildCommands(DISCORD_TOKEN, DISCORD_CLIENT_ID, guild.id);
+    });
+
+    await Promise.all(registerPromises);
+};
+
+export const handleGuildCreate = async (guild: import('discord.js').Guild) => {
+    console.log(`Joined new guild: ${guild.name} (${guild.id})`);
+    const { DISCORD_TOKEN, DISCORD_CLIENT_ID } = process.env;
+
+    if (!DISCORD_TOKEN || !DISCORD_CLIENT_ID) return;
+
+    await registerGuildCommands(DISCORD_TOKEN, DISCORD_CLIENT_ID, guild.id);
 };
 
 export const handleInteraction = async (interaction: Interaction) => {
