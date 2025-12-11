@@ -72,11 +72,11 @@
     - [ ] ローカルでの起動確認 (`npm run dev`)
         - **[IMPORTANT]** `npm install` (including `better-sqlite3`) is required.
     - [ ] コマンド動作確認
-- [ ] デプロイ (GCP Compute Engine)
+- [/] デプロイ (GCP Compute Engine)
     - [ ] VMセットアップスクリプト(startup-script)作成
-    - [ ] VM作成 (e2-micro/Ubuntu, USリージョン推奨)
-    - [ ] 接続 & Git Clone (Deploy Key設定済み前提)
-    - [ ] **サーバー上での `.env` 作成**
-    - [ ] サーバー内環境構築 (npm install, build)
+    - [x] VM作成 (e2-micro/Ubuntu, USリージョン推奨)
+    - [x] 接続 & Git Clone (Deploy Key設定済み前提)
+    - [x] **サーバー上での `.env` 作成**
+    - [x] サーバー内環境構築 (npm install, build: **Troubleshooting OOM**)
     - [ ] PM2による起動 & 常時稼働設定 (startup)
     - [ ] 動作確認 (ログ確認 `pm2 logs`)

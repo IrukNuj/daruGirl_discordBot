@@ -2,7 +2,6 @@ import { ChatInputCommandInteraction, CacheType, StringSelectMenuInteraction, St
 // google/service.ts のインポートを削除 (移行完了のため)
 import { addTask, getTasks, getRandomTask, getTasksByIds, completeTasksByIds, Task } from '@/db/tasks.js';
 import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createTaskCompletedMessage } from '@/discord/embeds.js';
-import { createListTasksEmbed, createTaskAddedEmbed, createTaskPickedEmbed, createTaskCompletedMessage } from '@/discord/embeds.js';
 import { CommandHandler } from '@/discord/handlers/index.js';
 import { DEFAULT_CATEGORY } from '@/discord/constants.js';
 
